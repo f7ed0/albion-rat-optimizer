@@ -1,0 +1,55 @@
+table {
+    border-collapse: collapse;
+    border: 2px solid rgb(140 140 140);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+thead,
+tfoot {
+  background-color: rgb(228 240 245);
+}
+
+thead {
+  text-align: center;
+}
+
+tfoot,tbody {
+  text-align: left;
+}
+
+th,
+td {
+  border: 1px solid rgb(160 160 160);
+  padding: 8px 10px;
+
+}
+
+.holder {
+    //overflow-x : hidden;
+    //overflow-y: scroll;
+    min-width: 20em;
+    height: 40em;
+}
+
+.inside-tab {
+    padding: 1em;
+}
+
+.affordable {
+    background-color: #2FD20C99;
+}
+
+.expensive {
+    background-color: #FC080B99;
+}
+
+.less-interesting {
+    opacity: 0.6;
+}
+
+.me {
+    background-color: #ffff0055;
+}

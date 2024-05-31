@@ -1,0 +1,156 @@
+
+<div>
+  <mat-form-field>
+    <mat-label>City</mat-label>
+    <mat-select [(value)]="current_city" (valueChange)="updatePrice()">
+      <mat-select-trigger>
+        {{api.cities[current_city]}}
+      </mat-select-trigger>
+      @for(item of o_k(api.cities) ; track item){
+        <mat-option [value]="item">
+          {{api.cities[item]}}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+<div class="whole-container">
+  <div>
+    <div class="item-wrapper up">
+      <app-item-holder [currentCity]="current_city" slot="bag" [(data)]="items_data['bag']"></app-item-holder>
+      <app-item-holder [currentCity]="current_city" slot="head" [(data)]="items_data['head']"></app-item-holder>
+      <app-item-holder [currentCity]="current_city" slot="cape" [(data)]="items_data['cape']"></app-item-holder>
+    </div>
+    <div class="item-wrapper mid">
+      <app-item-holder [currentCity]="current_city" slot="mainhand" [(data)]="items_data['mainhand']"></app-item-holder>
+      <app-item-holder [currentCity]="current_city" slot="armor" [(data)]="items_data['armor']"></app-item-holder>
+      <app-item-holder [disabled]="isWeaponTwoHanded()" [dataReplacement]="items_data['mainhand']" [currentCity]="current_city" slot="offhand" [(data)]="items_data['offhand']"></app-item-holder>
+    </div>
+    <div class="item-wrapper down">
+      <app-item-holder [currentCity]="current_city" slot="potion" [(data)]="items_data['potion']"></app-item-holder>
+      <app-item-holder [currentCity]="current_city" slot="shoes" [(data)]="items_data['shoes']"></app-item-holder>
+      <app-item-holder [currentCity]="current_city" slot="food" [(data)]="items_data['food']"></app-item-holder>
+    </div>
+    <div class="item-wrapper mount">
+      <app-item-holder [currentCity]="current_city" slot="mount" [(data)]="items_data['mount']"></app-item-holder>
+    </div>
+  </div>
+  <div>
+    <table class="recap-table">
+      <thead>
+        <tr>
+          <th scope="col" width="100px">Slot</th>
+          <th scope="col" width="200px">Item Name</th>
+          <th scope="col">Enchant level</th>
+          <th scope="col" width="80px">Quality</th>
+          <th scope="col" class="ip">IP</th>
+          <th scope="col">Price&#64;city</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(slot of slottypes.slice(0,6); track slot){
+          <tr>
+            @if(slot === 'offhand' && isWeaponTwoHanded()){
+              <th scope="row" style="opacity: 0.4;">{{slot}}</th>
+              <td colspan="5" style="opacity: 0.4;text-align: center;">weapon is two-handed</td>
+            } @else {
+              <th scope="row">{{slot}}</th>
+              @if(items_data[slot].itemID) {
+                <td>{{api.getLocalised(items_data[slot].itemID,"EN-US")}}</td>
+                <td>T{{items_data[slot].itemLevel}}.{{items_data[slot].enchantLevel}}</td>
+                <td>{{api.quality[items_data[slot].quality]}}</td>
+                <td>{{items_data[slot].IP}}</td>
+                <td>{{pf.formatPrice(items_data[slot].price)}}</td>
+              } @else {
+                <td colspan="5"></td>
+              }
+            }
+          </tr>
+        }
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="col" colspan="4">Total Gear</th>
+          <td>{{IPTotalStuff}}</td>
+          <td>{{pf.formatPrice(PriceTotalStuff)}}</td>
+        </tr>
+      </tfoot>
+    </table>
+    <table class="recap-table">
+      <thead>
+        <tr>
+          <th scope="col" width="100px">Slot</th>
+          <th scope="col" width="200px">Item Name</th>
+          <th scope="col">Enchant level</th>
+          <th scope="col" width="80px">Quality</th>
+          <th scope="col" class="ip">IP</th>
+          <th scope="col">Price&#64;city</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(slot of slottypes.slice(6,8); track slot){
+        <tr>
+          <th scope="row">{{slot}}</th>
+          @if(items_data[slot].itemID) {
+            
+            <td>{{api.getLocalised(items_data[slot].itemID,"EN-US")}}</td>
+            <td>T{{items_data[slot].itemLevel}}.{{items_data[slot].enchantLevel}}</td>
+            <td>{{api.quality[items_data[slot].quality]}}</td>
+            <td>{{items_data[slot].IP}}</td>
+            <td>{{pf.formatPrice(items_data[slot].price)}}</td>
+          } @else {
+            <td colspan="5"></td>
+          }
+        </tr>
+        }
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="col" colspan="5">Total Transport</th>
+          <td>{{pf.formatPrice(PriceTotalTransport)}}</td>
+        </tr>
+      </tfoot>
+    </table>
+    <table class="recap-table">
+      <thead>
+        <tr>
+          <th scope="col" width="100px">Slot</th>
+          <th scope="col" width="200px">Item Name</th>
+          <th scope="col">Enchant level</th>
+          <th scope="col" width="80px">Quality</th>
+          <th scope="col" class="ip">Quantity</th>
+          <th scope="col">Price&#64;city</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(slot of slottypes.slice(8); track slot){
+        <tr>
+          <th scope="row">{{slot}}</th>
+          @if(items_data[slot].itemID){
+            <td>{{api.getLocalised(items_data[slot].itemID,"EN-US")}}</td>
+            <td>T{{items_data[slot].itemLevel}}.{{items_data[slot].enchantLevel}}</td>
+            <td>{{api.quality[items_data[slot].quality]}}</td>
+            <td><input matInput type="number" min="0" max="5" (change)="items_data[slot].updateQuantity($any($event).target.value)" [value]="items_data[slot].quantity" class="ip"></td>
+            <td>{{pf.formatPrice(items_data[slot].price)}} /u</td>
+          } @else {
+            <td colspan="5"></td>
+          }
+        </tr>
+        }
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row" colspan="5">Total consumable</th>
+          <td>{{pf.formatPrice(PriceTotalConsumable)}}</td>
+        </tr>
+      </tfoot>
+    </table>
+    <div>
+      Grand total : <label>{{pf.formatWholePrice(PriceTotalConsumable+PriceTotalStuff+PriceTotalTransport)}}</label>
+    </div>
+  </div>
+</div>
+<div class="button-holder">
+  <button color="primary" [cdkCopyToClipboard]="URL" (click)="openCopySnack()" mat-flat-button><mat-icon>content_copy</mat-icon>Copy ID</button>
+  <button color="accent" mat-flat-button (click)="openOptimizer()"><mat-icon>ssid_chart</mat-icon> Optimize</button>
+</div>

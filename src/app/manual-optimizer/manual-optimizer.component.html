@@ -1,0 +1,53 @@
+@if(rdy) {
+<div class="holder">
+    <mat-tab-group>
+    @for(slot of slottypes.slice(0,6); track slot) {
+    @if(data.items_data[slot].itemID && data.items_data[slot].itemLevel >=4 ) {
+        <mat-tab label="{{slot}}">
+            <div class="inside-tab">
+                <label>Optimizing {{slot}} : {{api.getLocalised(data.items_data[slot].itemID,'EN-US')}}</label>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tier</th>
+                            <th>quality</th>
+                            <th>price</th>
+                            <th>IP diff</th>
+                            <th>price/IP point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @for(i of alts[slot].keys(); track i) {
+                        <tr 
+                            [class.less-interesting]="alts[slot][i].quality !== data.items_data[slot].quality" 
+                            [class.affordable]="readPrice(slot,i) !== 0 && readPrice(slot,i) < data.items_data[slot].price" 
+                            [class.expensive]="readPrice(slot,i) !== 0 && readPrice(slot,i) > data.items_data[slot].price"
+                            [class.me]="alts[slot][i].quality === data.items_data[slot].quality && alts[slot][i].itemID === data.items_data[slot].itemID && alts[slot][i].enchantLevel === data.items_data[slot].enchantLevel"
+                        >
+                            <td>
+                                T{{alts[slot][i].itemID[1]}}.{{alts[slot][i].enchantLevel}}
+                            </td>
+                            <td>
+                                {{api.quality[alts[slot][i].quality]}}
+                            </td>
+                            <td>{{readPrice(slot,i) === 0 ? "NO PRICE" : readPrice(slot,i)}}</td>
+                            <td>
+                                {{(readIP(slot,i)-data.items_data[slot].IP) > 0 ?  "+" : ""}}
+                                {{readIP(slot,i)-data.items_data[slot].IP}}
+                            </td>
+                            <td>
+                                {{readPrice(slot,i) === 0 ? "NO PRICE" : (
+                                    readIP(slot,i)-data.items_data[slot].IP === 0 ? sign(readPrice(slot,i)-data.items_data[slot].price) > 0 ? "-infty" : "infty" : floor((readPrice(slot,i)-data.items_data[slot].price)/(readIP(slot,i)-data.items_data[slot].IP))
+                                ) }}
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table> 
+            </div>
+        </mat-tab>
+    }
+    }
+    </mat-tab-group>
+</div>
+}

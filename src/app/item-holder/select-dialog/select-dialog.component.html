@@ -1,0 +1,63 @@
+<div class="turbo-container-3000">
+  <div class="selector-wrapper">
+    <img [src]="item_url(data.itemID)" class="big-previewer"/>
+    <div>
+      <mat-form-field style="width: 100px;">
+        <mat-label>Tier</mat-label>
+        <mat-select [(value)]="tier" (valueChange)="act();_filter();">
+          <mat-select-trigger>
+            <label [style.background-color]="tiercolor[tier]" class="tier-label">{{ tier == 0  ? "any" : "T"+tier}}</label>
+          </mat-select-trigger>
+          <mat-option [value]="0">
+            all
+          </mat-option>
+          @for (number of [2,3,4,5,6,7,8]; track number) {
+            <mat-option [value]="number">
+              <label [style.background-color]="tiercolor[number]" class="tier-label">T{{number}}</label>
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="uniquename">
+        <mat-select [(value)]="data.itemID">
+          <input [value]="search_value" (keypress)="$event.stopPropagation()" (input)="updateSearch($any($event).target.value);$event.stopPropagation()" placeholder="Search..." matInput class="option-searcher"/>
+          <div style="overflow-y: scroll; height: 200px;">
+          @for (option of filteredOptions; track option) {
+            <mat-option [value]="option['@uniquename']">
+              <div class="option_holder">
+                <label>{{api.getLocalised(option['@uniquename'],'EN-US')}}</label>
+              </div>
+            </mat-option>
+          }
+          </div>
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="mr10">
+        <mat-label>Enchant Level</mat-label>
+        <mat-select [(value)]="data.enchantLevel">
+          @for (number of [0,1,2,3,4]; track number) {
+            <mat-option [value]="number">
+              {{number}}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Quality</mat-label>
+        <mat-select [(value)]="data.quality">
+          @for (q of quality; track q) {
+            <mat-option [value]="q.level">
+              {{q.title}}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="button-holder">
+    <button color="accent" mat-flat-button (click)="abortAndQuit()">Cancel</button>
+    <button mat-flat-button (click)="saveAndQuit()" class="mr5px">Save</button>
+  </div>
+</div>

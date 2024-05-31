@@ -1,0 +1,64 @@
+:host{
+    height: 100%;
+}
+
+.selector-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selector {
+    width: 500px;
+}
+
+.big-previewer {
+    width: 150px;
+    height: 150px;
+}
+
+.option_holder {
+    display:  flex;
+    align-items: center;
+
+    font-size: 15px;
+    
+}
+
+.mr10 {
+    margin-right: 10px;
+}
+
+.tier-label {
+    padding: 10px  15px;
+    border-radius: 10px;
+    color : black;
+}
+
+.uniquename {
+    width: 300px;
+}
+
+::ng-deep .option-searcher {
+    border: gray 1px solid !important;
+    border-radius: 10px;
+    width: calc(95% - 22px);
+    margin-left: 5px;
+    margin-bottom: 10px;
+    padding: 10px !important;
+}
+
+.button-holder {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+.turbo-container-3000 {
+    overflow: hidden;
+    padding: 1em;
+}
+
+.mr5px {
+    margin-right: 5px;
+}

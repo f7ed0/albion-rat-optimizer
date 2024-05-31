@@ -1,0 +1,15 @@
+.container {
+    border: 1px solid black;
+    width: 100px;
+    aspect-ratio: 1;
+    margin: 10px;
+
+    img {
+        width: 100%;
+    }
+}
+
+.disabled {
+    opacity: 0.6;
+}
+
